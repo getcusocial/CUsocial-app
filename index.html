@@ -208,13 +208,15 @@ function makeLeafletMap(id,pins,friendPins){
     const offsets=[[-0.004,-0.006],[-0.002,0.008],[0.005,-0.003],[0.003,0.007],[-0.006,0.003]];
     if(pins) pins.forEach((ev,i)=>{
       const o=offsets[i%offsets.length];
-      const html=`<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:36px;height:36px;border-radius:50%;background:${ev.friends>0?'rgba(45,74,62,0.88)':'rgba(26,26,24,0.78)'};border:2.5px solid white;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,0.22)"><div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.9)"></div></div><div style="background:rgba(26,26,24,0.78);color:white;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;font-family:sans-serif">${ev.name}${ev.friends>0?' · '+ev.friends+' friends':''}</div></div>`;
-      L.marker([MAP_CENTER[0]+o[0],MAP_CENTER[1]+o[1]],{icon:L.divIcon({className:'',html,iconSize:[120,58],iconAnchor:[60,18]})}).addTo(map);
+      const html=`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer"><div style="width:36px;height:36px;border-radius:50%;background:${ev.friends>0?'rgba(45,74,62,0.88)':'rgba(26,26,24,0.78)'};border:2.5px solid white;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,0.22)"><div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.9)"></div></div><div style="background:rgba(26,26,24,0.78);color:white;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;font-family:sans-serif">${ev.name}${ev.friends>0?' · '+ev.friends+' friends':''}</div></div>`;
+      const marker=L.marker([MAP_CENTER[0]+o[0],MAP_CENTER[1]+o[1]],{icon:L.divIcon({className:'',html,iconSize:[120,58],iconAnchor:[60,18]})}).addTo(map);
+      marker.on('click',()=>{S.discoverSel=ev;render();});
     });
     if(friendPins) friendPins.forEach((venue,i)=>{
       const o=offsets[i%offsets.length];
-      const html=`<div style="display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:36px;height:36px;border-radius:50%;background:rgba(45,74,62,0.88);border:2.5px solid white;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,0.22);font-size:13px;color:white;font-weight:700;font-family:sans-serif">${venue.friendIds.length}</div><div style="background:rgba(26,26,24,0.78);color:white;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;font-family:sans-serif">${venue.venue}</div></div>`;
-      L.marker([MAP_CENTER[0]+o[0],MAP_CENTER[1]+o[1]],{icon:L.divIcon({className:'',html,iconSize:[100,58],iconAnchor:[50,18]})}).addTo(map);
+      const html=`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer"><div style="width:36px;height:36px;border-radius:50%;background:rgba(45,74,62,0.88);border:2.5px solid white;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,0.22);font-size:13px;color:white;font-weight:700;font-family:sans-serif">${venue.friendIds.length}</div><div style="background:rgba(26,26,24,0.78);color:white;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;font-family:sans-serif">${venue.venue}</div></div>`;
+      const marker=L.marker([MAP_CENTER[0]+o[0],MAP_CENTER[1]+o[1]],{icon:L.divIcon({className:'',html,iconSize:[100,58],iconAnchor:[50,18]})}).addTo(map);
+      marker.on('click',()=>{S.friendsSelV=venue;render();});
     });
     L.control.zoom({position:'bottomright'}).addTo(map);
   },80);
